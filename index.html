@@ -1,0 +1,893 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>英検5級 完全版トレーニング</title>
+  <style>
+    :root {
+      --bg: #f7f4ef;
+      --card: #ffffff;
+      --ink: #2e2a26;
+      --muted: #7b7268;
+      --line: #e8dfd2;
+      --primary: #6f5b48;
+      --primary-2: #8a745f;
+      --good: #2f9e44;
+      --bad: #d94841;
+      --accent: #f1e4d2;
+      --accent-2: #eef6ff;
+      --orange: #f59a3d;
+      --green: #43b05c;
+      --shadow: 0 10px 28px rgba(0,0,0,.07);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Yu Gothic", sans-serif;
+      background: linear-gradient(180deg, #faf8f4, #f4efe7);
+      color: var(--ink);
+    }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 16px; }
+    .card {
+      background: var(--card);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+      border: 1px solid var(--line);
+    }
+    h1, h2, h3, p { margin: 0; }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.3fr .9fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+    .hero-title { font-size: 30px; font-weight: 900; }
+    .hero-sub { margin-top: 10px; color: var(--muted); line-height: 1.8; font-size: 14px; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .stat {
+      background: var(--accent);
+      border-radius: 18px;
+      padding: 12px;
+      text-align: center;
+    }
+    .stat-label { font-size: 12px; color: var(--muted); }
+    .stat-value { font-size: 26px; font-weight: 900; margin-top: 4px; }
+
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .mode-btn, .choice-btn, .small-btn, .order-btn, .nav-btn {
+      border: none;
+      border-radius: 18px;
+      cursor: pointer;
+      transition: transform .08s ease, background .2s ease;
+      font-family: inherit;
+    }
+    .mode-btn:active, .choice-btn:active, .small-btn:active, .order-btn:active, .nav-btn:active { transform: scale(.98); }
+
+    .mode-btn {
+      min-height: 94px;
+      padding: 14px;
+      text-align: left;
+      background: #f8f3ec;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+    .mode-btn.active { background: var(--primary); color: white; }
+    .mode-title { font-size: 17px; font-weight: 900; margin-bottom: 6px; }
+    .mode-desc { font-size: 12px; line-height: 1.5; opacity: .92; }
+
+    .main {
+      display: grid;
+      grid-template-columns: 1.25fr .8fr;
+      gap: 16px;
+    }
+    .quiz-wrap {
+      background: linear-gradient(180deg, #fffaf2, #fff);
+      border: 2px solid #f1e3cf;
+      border-radius: 24px;
+      padding: 18px;
+    }
+    .top-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #efe3d2;
+      color: #6f5b48;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .order-btn, .small-btn, .nav-btn {
+      padding: 10px 12px;
+      font-size: 14px;
+      font-weight: 800;
+      background: #ece1d3;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+    .order-btn.active {
+      background: var(--orange);
+      color: white;
+      border-color: var(--orange);
+    }
+
+    .big-quiz {
+      display: grid;
+      grid-template-columns: 1.05fr .46fr;
+      gap: 16px;
+      align-items: start;
+    }
+    .question-meta { color: var(--muted); font-size: 15px; margin-bottom: 8px; }
+    .question {
+      font-size: 38px;
+      font-weight: 900;
+      line-height: 1.48;
+      min-height: 110px;
+      margin-bottom: 10px;
+    }
+    .translation {
+      padding: 12px 14px;
+      background: var(--accent-2);
+      border-left: 5px solid #9dc5f3;
+      border-radius: 14px;
+      line-height: 1.8;
+      color: #3e4c59;
+      margin-bottom: 14px;
+    }
+    .choices {
+      display: grid;
+      gap: 10px;
+    }
+    .choice-btn {
+      width: 100%;
+      padding: 16px 14px;
+      text-align: left;
+      font-size: 24px;
+      font-weight: 800;
+      background: #f8efe4;
+      color: var(--ink);
+      border: 1px solid #ebdecb;
+      line-height: 1.45;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .choice-mark {
+      min-width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff9f1;
+      border: 1px solid #dcc5a8;
+      font-size: 16px;
+      font-weight: 900;
+    }
+    .choice-btn.good { background: #dff5df; }
+    .choice-btn.bad { background: #ffe0e0; }
+
+    .feedback {
+      min-height: 56px;
+      margin-top: 14px;
+      font-size: 18px;
+      line-height: 1.8;
+      font-weight: 800;
+    }
+    .feedback.good { color: var(--good); }
+    .feedback.bad { color: var(--bad); }
+
+    .bottom-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .nav-group { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .sidebox {
+      border-radius: 22px;
+      padding: 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+    .avatar {
+      font-size: 72px;
+      text-align: center;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .level { text-align: center; font-size: 28px; font-weight: 900; }
+    .name { text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 12px; }
+    .bar-label { font-size: 12px; color: var(--muted); margin: 6px 0; }
+    .bar-wrap {
+      height: 14px;
+      background: #eadcc8;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .hp-bar { height: 100%; width: 100%; background: linear-gradient(90deg, #fb7185, #ef4444); }
+    .xp-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #22c55e, #84cc16); }
+    .tiny { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+
+    .jumper {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+    .jump-btn {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      padding: 10px 0;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .jump-btn.current { outline: 3px solid #f3c16b; }
+    .jump-btn.done { background: #eef6ff; }
+    .jump-btn.wrong { background: #ffe8e8; }
+
+    .panel {
+      border-radius: 22px;
+      padding: 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+    .panel h3 { font-size: 20px; margin-bottom: 10px; }
+    .panel p { color: var(--muted); line-height: 1.7; font-size: 14px; }
+    .progress {
+      margin-top: 10px;
+      height: 14px;
+      background: #eadcc8;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-bar { width: 0%; height: 100%; background: var(--primary); transition: width .2s ease; }
+    .history-list, .wrong-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+      max-height: 260px;
+      overflow: auto;
+    }
+    .history-item, .wrong-item {
+      background: #f8f2e8;
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-size: 14px;
+      line-height: 1.55;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .section-note { margin-top: 8px; font-size: 13px; color: var(--muted); }
+    .footer { text-align: center; font-size: 13px; color: var(--muted); padding-bottom: 16px; }
+
+    @media (max-width: 980px) {
+      .hero, .main, .big-quiz { grid-template-columns: 1fr; }
+      .mode-grid { grid-template-columns: repeat(2, 1fr); }
+      .question { font-size: 30px; min-height: auto; }
+      .choice-btn { font-size: 20px; }
+      .jumper { grid-template-columns: repeat(5, 1fr); }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card hero">
+    <div>
+      <div class="hero-title">英検5級 完全版トレーニング</div>
+      <div class="hero-sub">
+        メインは <b>本番形式50問テスト</b>。<br>
+        そのほかに <b>単語100トレーニング</b>、<b>文法・会話</b>、<b>まちがえ復習</b> があります。<br>
+        今回、50問クイズは前の見やすいUIに寄せて、<b>本番順</b>と<b>ランダム</b>も選べるようにしました。
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="stat-label">正解数</div><div class="stat-value" id="statCorrect">0</div></div>
+      <div class="stat"><div class="stat-label">正答率</div><div class="stat-value" id="statRate">0%</div></div>
+      <div class="stat"><div class="stat-label">れんぞく正解</div><div class="stat-value" id="statStreak">0</div></div>
+      <div class="stat"><div class="stat-label">まちがえ数</div><div class="stat-value" id="statWrong">0</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="mode-grid" id="modeGrid"></div>
+  </div>
+
+  <div class="main">
+    <div class="card quiz-wrap">
+      <div class="top-controls">
+        <span class="pill" id="modeBadge">本番形式50問テスト</span>
+        <button class="order-btn active" id="orderFixedBtn" onclick="setMainOrder('fixed')">本番順</button>
+        <button class="order-btn" id="orderRandomBtn" onclick="setMainOrder('random')">ランダム</button>
+        <button class="small-btn" onclick="speakQuestion()">🔊 問題を読む</button>
+        <button class="small-btn" onclick="speakChoices()">🔉 選択肢を読む</button>
+        <button class="small-btn" onclick="toggleTranslation()">全文訳 ON/OFF</button>
+      </div>
+
+      <div class="big-quiz">
+        <div>
+          <div class="question-meta" id="questionMeta">1 / 50</div>
+          <div class="question" id="questionText">ここに問題が出ます</div>
+          <div class="translation" id="translationBox">全文訳がここに出ます</div>
+          <div class="choices" id="choices"></div>
+          <div class="feedback" id="feedback"></div>
+
+          <div class="bottom-row">
+            <div class="nav-group">
+              <button class="nav-btn" onclick="prevQuestion()">← もどる</button>
+              <button class="nav-btn" style="background: var(--orange); color:white; border-color: var(--orange);" onclick="nextQuestion()">つぎへ →</button>
+            </div>
+            <div class="nav-group">
+              <button class="nav-btn" onclick="showAnswer()">答えを見る</button>
+              <button class="nav-btn" onclick="restartMode()">最初から</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="sidebox">
+            <div class="avatar" id="avatar">🧙</div>
+            <div class="level" id="levelText">Lv.1</div>
+            <div class="name">えいごマスター</div>
+
+            <div class="bar-label">HP</div>
+            <div class="bar-wrap"><div class="hp-bar" id="hpBar"></div></div>
+            <div class="tiny" id="hpText">100 / 100</div>
+
+            <div class="bar-label">EXP</div>
+            <div class="bar-wrap"><div class="xp-bar" id="xpBar"></div></div>
+            <div class="tiny" id="xpText">0 / 100</div>
+
+            <div class="bar-label">れんぞく正解</div>
+            <div style="font-size:30px; font-weight:900;" id="comboText">0</div>
+
+            <div class="bar-label" style="margin-top:10px;">まちがえた問題数</div>
+            <div style="font-size:30px; font-weight:900;" id="missCountText">0</div>
+          </div>
+
+          <div class="jumper" id="jumper"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side">
+      <div class="panel">
+        <h3>進みぐあい</h3>
+        <p id="modeDesc">ここにモードの説明が出ます。</p>
+        <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+        <div class="section-note" id="progressNote">0 / 0</div>
+      </div>
+
+      <div class="panel">
+        <h3>最近の5問</h3>
+        <div class="history-list" id="historyList"></div>
+      </div>
+
+      <div class="panel">
+        <h3>まちがえた問題</h3>
+        <p>このモードだけの復習もできます。</p>
+        <div class="wrong-list" id="wrongList"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">iPadのSafariで使えるように、文字・ボタンを大きめにしています。</div>
+</div>
+
+<script>
+const vocabPairs = [
+  ["use","使う"],["get up","起きる"],["go","行く"],["come","来る"],["eat","食べる"],
+  ["drink","飲む"],["read","読む"],["write","書く"],["run","走る"],["walk","歩く"],
+  ["play","遊ぶ"],["study","勉強する"],["see","見る"],["watch","見る"],["make","作る"],
+  ["have","持っている"],["like","好き"],["want","欲しい"],["need","必要"],["open","開ける"],
+  ["close","閉める"],["live","住む"],["work","働く"],["school","学校"],["student","生徒"],
+  ["teacher","先生"],["friend","友達"],["family","家族"],["father","父"],["mother","母"],
+  ["brother","兄弟"],["sister","姉妹"],["grandfather","祖父"],["grandmother","祖母"],["book","本"],
+  ["desk","机"],["chair","いす"],["bed","ベッド"],["lamp","ランプ"],["fan","扇風機"],
+  ["clock","時計"],["window","窓"],["door","ドア"],["curtain","カーテン"],["blanket","毛布"],
+  ["shelf","棚"],["bag","かばん"],["pen","ペン"],["pencil","えんぴつ"],["notebook","ノート"],
+  ["computer","コンピューター"],["phone","電話"],["coffee","コーヒー"],["water","水"],["milk","牛乳"],
+  ["bread","パン"],["rice","ごはん"],["apple","りんご"],["dog","犬"],["cat","猫"],
+  ["bird","鳥"],["fish","魚"],["red","赤"],["blue","青"],["green","緑"],
+  ["yellow","黄色"],["black","黒"],["white","白"],["big","大きい"],["small","小さい"],
+  ["good","よい"],["bad","悪い"],["hot","暑い"],["cold","寒い"],["new","新しい"],
+  ["old","古い"],["fast","速い"],["slow","遅い"],["today","今日"],["tomorrow","明日"],
+  ["morning","朝"],["night","夜"],["home","家"],["park","公園"],["store","店"],
+  ["city","都市"],["train","電車"],["car","車"],["bus","バス"],["bike","自転車"],
+  ["table","テーブル"],["food","食べ物"],["game","ゲーム"],["music","音楽"],["movie","映画"],
+  ["sun","太陽"],["rain","雨"],["snow","雪"],["happy","幸せ"],["sad","悲しい"]
+];
+
+const modeDefs = [
+  { id: 'main50', title: '本番形式50問テスト', desc: 'メイン練習。単語→会話→文法→読解の50問。' },
+  { id: 'vocab100', title: '単語100トレーニング', desc: '5級で覚えるべき単語100語を集中練習。' },
+  { id: 'grammar', title: '文法・会話トレーニング', desc: 'Do you / 三単現 / 前置詞 / 会話をまとめて練習。' },
+  { id: 'wrongOnly', title: 'まちがえた問題だけ', desc: 'その日まちがえた問題だけをやり直す。' }
+];
+
+const grammarTalkQuestions = [
+  {id:'g1', q:"I usually ( ) up at 6:50.", choices:["get","gets","getting","got"], answer:0, translation:"私はたいてい6時50分に起きます。", explanation:"主語が I なので get up です。", speech:"I usually blank up at six fifty."},
+  {id:'g2', q:"Do you ( ) a computer often?", choices:["use","uses","used","using"], answer:0, translation:"あなたはよくコンピューターを使いますか。", explanation:"Do you のあとには動詞の原形 use がきます。"},
+  {id:'g3', q:"Where do your grandparents ( )?", choices:["lives","live","living","lived"], answer:1, translation:"あなたのおじいさんおばあさんはどこに住んでいますか。", explanation:"do のあとで、主語も複数なので live です。"},
+  {id:'g4', q:"My uncle ( ) in Osaka.", choices:["live","lives","living","to live"], answer:1, translation:"私のおじは大阪に住んでいます。", explanation:"My uncle は1人なので lives です。"},
+  {id:'g5', q:"A: What do you want?  B: I want a cup of ( ).", choices:["coffee","use","student","there"], answer:0, translation:"A: 何がほしいですか。B: コーヒーを一杯ほしいです。", explanation:"a cup of coffee が自然です。"},
+  {id:'g6', q:"A: It's dark.  B: OK. Let's turn on the ( ).", choices:["lamp","blanket","rug","curtains"], answer:0, translation:"A: 暗いです。B: わかりました。ランプをつけましょう。", explanation:"暗いときは lamp をつけます。"},
+  {id:'g7', q:"A: It's hot.  B: OK. Let's turn on the ( ).", choices:["fan","clock","shelf","bed"], answer:0, translation:"A: 暑いです。B: わかりました。扇風機をつけましょう。", explanation:"暑いときは fan を使います。"},
+  {id:'g8', q:"Which is correct?", choices:["I live Osaka.","I want a cup of coffee.","He get up around seven.","My book is on the curtains."], answer:1, translation:"正しい文はどれですか。", explanation:"I want a cup of coffee. だけが正しい文です。"},
+  {id:'g9', q:"My father ( ) soccer every Sunday.", choices:["play","plays","playing","played"], answer:1, translation:"私の父は毎週日曜日にサッカーをします。", explanation:"My father は1人なので plays です。"},
+  {id:'g10', q:"I go to school ( ) Monday.", choices:["in","on","at","to"], answer:1, translation:"私は月曜日に学校へ行きます。", explanation:"曜日の前は on を使います。"}
+];
+
+const readingQuestions = [
+  {id:'r1', q:"Tom is a high school student. He gets up around six. He uses a computer every day. He wants a cup of coffee for breakfast. What does Tom want for breakfast?", choices:["A computer","A cup of coffee","A fan","A lamp"], answer:1, translation:"トムは高校生です。彼は6時ごろ起きます。彼は毎日コンピューターを使います。彼は朝食にコーヒーを一杯ほしいです。トムは朝食に何がほしいですか。", explanation:"最後の文に a cup of coffee とあります。"},
+  {id:'r2', q:"Tom is a high school student. He gets up around six. He uses a computer every day. What does Tom do every day?", choices:["He opens the curtains.","He uses a computer.","He turns on the fan.","He reads in bed."], answer:1, translation:"トムは高校生です。彼は6時ごろ起きます。彼は毎日コンピューターを使います。トムは毎日何をしますか。", explanation:"He uses a computer every day. とあります。"},
+  {id:'r3', q:"Mika looks at the snow from her room. She opens the curtains. It is cold, so she uses a blanket. What does Mika open?", choices:["The shelf","The blanket","The curtains","The lamp"], answer:2, translation:"ミカは部屋から雪を見ます。彼女はカーテンを開けます。寒いので毛布を使います。ミカは何を開けますか。", explanation:"She opens the curtains. とあります。"},
+  {id:'r4', q:"Mika looks at the snow from her room. It is cold, so she uses a blanket. Why does Mika use a blanket?", choices:["Because it is hot.","Because it is dark.","Because it is cold.","Because it is morning."], answer:2, translation:"ミカは部屋から雪を見ます。寒いので毛布を使います。なぜミカは毛布を使いますか。", explanation:"It is cold, so she uses a blanket. とあります。"},
+  {id:'r5', q:"Ken has a dog. The dog is under the table. Ken's book is on the shelf. Where is the dog?", choices:["On the shelf","Under the table","In the bag","By the window"], answer:1, translation:"ケンは犬を飼っています。その犬はテーブルの下にいます。ケンの本は棚の上にあります。犬はどこにいますか。", explanation:"The dog is under the table. とあります。"}
+];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function sampleWrongChoices(correct, arr, n=3) {
+  return shuffle(arr.filter(v => v !== correct)).slice(0, n);
+}
+
+function makeVocabMeaningQuestions() {
+  return vocabPairs.map(([word, meaning], idx) => {
+    const choices = shuffle([meaning, ...sampleWrongChoices(meaning, vocabPairs.map(v => v[1]))]);
+    return {
+      id: `vocab-${idx+1}`,
+      q: `What is the meaning of '${word}'?`,
+      choices,
+      answer: choices.indexOf(meaning),
+      translation: `${word} の意味はどれですか。`,
+      explanation: `${word} = ${meaning}`,
+      speech: word
+    };
+  });
+}
+
+function makeMain50Fixed() {
+  const vocabQ = makeVocabMeaningQuestions().slice(0, 15);
+  const talkQ = [
+    {id:'t1', q:"A: Do you like music?  B: ( )", choices:["Yes, I do","Yes, I am","Yes, I can","Yes, I like"], answer:0, translation:"A: あなたは音楽が好きですか。B: （　）", explanation:"Do you ...? には Yes, I do. と答えます。"},
+    {id:'t2', q:"A: Are you ready?  B: ( )", choices:["Yes, let's go","Yes, ready","Ready I am","I go"], answer:0, translation:"A: 準備はいいですか。B: （　）", explanation:"自然な返事は Yes, let's go. です。"},
+    {id:'t3', q:"A: How old are you?  B: ( )", choices:["I am ten","I ten","Ten I","I have ten"], answer:0, translation:"A: 何歳ですか。B: （　）", explanation:"年齢は I am ten. のように答えます。"},
+    {id:'t4', q:"A: Where do you live?  B: ( )", choices:["I live in Yokohama","I live Yokohama","Live Yokohama","Yokohama live"], answer:0, translation:"A: どこに住んでいますか。B: （　）", explanation:"場所の前には in を入れて I live in Yokohama. です。"},
+    {id:'t5', q:"A: Thank you.  B: ( )", choices:["You're welcome","Hello","Sorry","Goodbye"], answer:0, translation:"A: ありがとう。B: （　）", explanation:"Thank you. には You're welcome. と返します。"},
+    {id:'t6', q:"A: Good morning.  B: ( )", choices:["Good morning","Good night","Good evening","Goodbye"], answer:0, translation:"A: おはよう。B: （　）", explanation:"朝のあいさつには Good morning. と返します。"},
+    {id:'t7', q:"A: Let's play soccer.  B: ( )", choices:["OK","Blue","Desk","Book"], answer:0, translation:"A: サッカーをしよう。B: （　）", explanation:"誘いに対して自然な返事は OK. です。"},
+    {id:'t8', q:"A: What do you want?  B: ( )", choices:["I want juice","I juice want","Want juice","Juice want"], answer:0, translation:"A: 何がほしいですか。B: （　）", explanation:"I want + もの で『私は〜がほしい』です。"},
+    {id:'t9', q:"A: It's hot.  B: Let's turn on the ( ).", choices:["fan","blanket","shelf","bag"], answer:0, translation:"A: 暑いです。B: 扇風機をつけましょう。", explanation:"暑いときは fan を使います。"},
+    {id:'t10', q:"A: It's dark.  B: Let's turn on the ( ).", choices:["lamp","curtain","bed","clock"], answer:0, translation:"A: 暗いです。B: ランプをつけましょう。", explanation:"暗いときは lamp をつけます。"},
+    {id:'t11', q:"A: Let's look at the snow.  B: Let's open the ( ).", choices:["curtain","shelf","blanket","desk"], answer:0, translation:"A: 雪を見ましょう。B: カーテンを開けましょう。", explanation:"外を見るには curtain を開けます。"},
+    {id:'t12', q:"A: What time do you get up?  B: I get up around ( ).", choices:["seven","fan","coffee","window"], answer:0, translation:"A: 何時に起きますか。B: 7時ごろに起きます。", explanation:"get up around seven で『7時ごろ起きる』です。"},
+    {id:'t13', q:"A: Do you use a computer every day?  B: ( )", choices:["Yes, I do","Yes, I am","Yes, I live","Yes, I use"], answer:0, translation:"A: あなたは毎日コンピューターを使いますか。B: （　）", explanation:"Do you ...? には Yes, I do. です。"},
+    {id:'t14', q:"A: What do you have for breakfast?  B: ( )", choices:["I have bread","I bread have","Have bread","Bread am"], answer:0, translation:"A: 朝ごはんに何を食べますか。B: パンを食べます。", explanation:"I have bread が自然です。"},
+    {id:'t15', q:"A: See you.  B: ( )", choices:["Bye","Eat","Run","School"], answer:0, translation:"A: またね。B: （　）", explanation:"別れのあいさつには Bye. が自然です。"}
+  ];
+  return [...vocabQ, ...talkQ, ...grammarTalkQuestions, ...readingQuestions];
+}
+
+const state = {
+  mode: 'main50',
+  mainOrder: 'fixed',
+  currentIndex: 0,
+  currentList: [],
+  showTranslation: true,
+  correct: 0,
+  total: 0,
+  streak: 0,
+  history: [],
+  wrongMap: {},
+  locked: false,
+  level: 1,
+  xp: 0,
+  hp: 100
+};
+
+const els = {
+  modeGrid: document.getElementById('modeGrid'),
+  statCorrect: document.getElementById('statCorrect'),
+  statRate: document.getElementById('statRate'),
+  statStreak: document.getElementById('statStreak'),
+  statWrong: document.getElementById('statWrong'),
+  modeBadge: document.getElementById('modeBadge'),
+  questionMeta: document.getElementById('questionMeta'),
+  questionText: document.getElementById('questionText'),
+  translationBox: document.getElementById('translationBox'),
+  choices: document.getElementById('choices'),
+  feedback: document.getElementById('feedback'),
+  modeDesc: document.getElementById('modeDesc'),
+  progressBar: document.getElementById('progressBar'),
+  progressNote: document.getElementById('progressNote'),
+  historyList: document.getElementById('historyList'),
+  wrongList: document.getElementById('wrongList'),
+  orderFixedBtn: document.getElementById('orderFixedBtn'),
+  orderRandomBtn: document.getElementById('orderRandomBtn'),
+  jumper: document.getElementById('jumper'),
+  avatar: document.getElementById('avatar'),
+  levelText: document.getElementById('levelText'),
+  hpBar: document.getElementById('hpBar'),
+  hpText: document.getElementById('hpText'),
+  xpBar: document.getElementById('xpBar'),
+  xpText: document.getElementById('xpText'),
+  comboText: document.getElementById('comboText'),
+  missCountText: document.getElementById('missCountText')
+};
+
+function saveProgress() {
+  localStorage.setItem('eiken5_complete_progress_v2', JSON.stringify({
+    correct: state.correct,
+    total: state.total,
+    streak: state.streak,
+    history: state.history,
+    wrongMap: state.wrongMap,
+    level: state.level,
+    xp: state.xp,
+    hp: state.hp,
+    mainOrder: state.mainOrder
+  }));
+}
+
+function loadProgress() {
+  const raw = localStorage.getItem('eiken5_complete_progress_v2');
+  if (!raw) return;
+  try {
+    const p = JSON.parse(raw);
+    state.correct = p.correct || 0;
+    state.total = p.total || 0;
+    state.streak = p.streak || 0;
+    state.history = p.history || [];
+    state.wrongMap = p.wrongMap || {};
+    state.level = p.level || 1;
+    state.xp = p.xp || 0;
+    state.hp = p.hp || 100;
+    state.mainOrder = p.mainOrder || 'fixed';
+  } catch (e) {}
+}
+
+function buildModeButtons() {
+  els.modeGrid.innerHTML = '';
+  modeDefs.forEach(m => {
+    const btn = document.createElement('button');
+    btn.className = 'mode-btn' + (state.mode === m.id ? ' active' : '');
+    btn.innerHTML = `<div class="mode-title">${m.title}</div><div class="mode-desc">${m.desc}</div>`;
+    btn.onclick = () => switchMode(m.id);
+    els.modeGrid.appendChild(btn);
+  });
+}
+
+function getModeList(mode) {
+  if (mode === 'main50') {
+    const fixed = makeMain50Fixed();
+    return state.mainOrder === 'fixed' ? fixed : shuffle(fixed);
+  }
+  if (mode === 'vocab100') return shuffle(makeVocabMeaningQuestions());
+  if (mode === 'grammar') return shuffle([...grammarTalkQuestions]);
+  if (mode === 'wrongOnly') return Object.values(state.wrongMap);
+  return [];
+}
+
+function setMainOrder(order) {
+  state.mainOrder = order;
+  els.orderFixedBtn.classList.toggle('active', order === 'fixed');
+  els.orderRandomBtn.classList.toggle('active', order === 'random');
+  if (state.mode === 'main50') {
+    restartMode();
+  }
+  saveProgress();
+}
+
+function switchMode(mode) {
+  state.mode = mode;
+  state.currentIndex = 0;
+  state.locked = false;
+  state.currentList = getModeList(mode);
+  buildModeButtons();
+  updateOrderButtons();
+  render();
+}
+
+function updateOrderButtons() {
+  const show = state.mode === 'main50';
+  els.orderFixedBtn.style.display = show ? 'inline-block' : 'none';
+  els.orderRandomBtn.style.display = show ? 'inline-block' : 'none';
+  els.orderFixedBtn.classList.toggle('active', state.mainOrder === 'fixed');
+  els.orderRandomBtn.classList.toggle('active', state.mainOrder === 'random');
+}
+
+function restartMode() {
+  state.currentIndex = 0;
+  state.locked = false;
+  state.currentList = getModeList(state.mode);
+  render();
+}
+
+function renderJumper() {
+  els.jumper.innerHTML = '';
+  const total = state.currentList.length;
+  if (!total) return;
+  state.currentList.forEach((q, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'jump-btn';
+    btn.textContent = idx + 1;
+    if (idx === state.currentIndex) btn.classList.add('current');
+    if (idx < state.currentIndex) btn.classList.add('done');
+    if (state.wrongMap[q.id || q.q]) btn.classList.add('wrong');
+    btn.onclick = () => { state.currentIndex = idx; render(); };
+    els.jumper.appendChild(btn);
+  });
+}
+
+function render() {
+  updateOrderButtons();
+
+  if (state.mode === 'wrongOnly' && state.currentList.length === 0) {
+    els.modeBadge.textContent = 'まちがえた問題だけ';
+    els.questionMeta.textContent = '0 / 0';
+    els.questionText.textContent = 'まだ、まちがえた問題がありません。';
+    els.translationBox.style.display = 'block';
+    els.translationBox.textContent = 'まずは本番形式50問テストや単語100をやってみよう。';
+    els.choices.innerHTML = '';
+    els.feedback.textContent = '';
+    els.jumper.innerHTML = '';
+    updateSide();
+    return;
+  }
+
+  const q = state.currentList[state.currentIndex];
+  const modeInfo = modeDefs.find(m => m.id === state.mode);
+  els.modeBadge.textContent = modeInfo.title;
+  els.questionMeta.textContent = `${state.currentIndex + 1} / ${state.currentList.length}`;
+  els.questionText.textContent = q.q;
+  els.translationBox.style.display = state.showTranslation ? 'block' : 'block';
+  els.translationBox.textContent = state.showTranslation ? ('全文訳： ' + q.translation) : '全文訳はOFFです';
+  els.feedback.textContent = '';
+  els.feedback.className = 'feedback';
+
+  els.choices.innerHTML = '';
+  const labels = ['A','B','C','D'];
+  q.choices.forEach((choice, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.innerHTML = `<span class="choice-mark">${labels[idx]}</span><span>${choice}</span>`;
+    btn.onclick = () => answer(idx, btn);
+    els.choices.appendChild(btn);
+  });
+
+  renderJumper();
+  updateSide();
+}
+
+function answer(idx, btn) {
+  if (state.locked) return;
+  state.locked = true;
+  const q = state.currentList[state.currentIndex];
+  const ok = idx === q.answer;
+  state.total += 1;
+
+  if (ok) {
+    state.correct += 1;
+    state.streak += 1;
+    state.xp += state.streak >= 3 ? 22 : 14;
+    while (state.xp >= 100) {
+      state.xp -= 100;
+      state.level += 1;
+      state.hp = Math.min(100, state.hp + 10);
+    }
+    btn.classList.add('good');
+    els.feedback.textContent = `せいかい！ ${q.explanation}`;
+    els.feedback.className = 'feedback good';
+    playGood();
+  } else {
+    state.streak = 0;
+    state.hp = Math.max(0, state.hp - 12);
+    btn.classList.add('bad');
+    state.wrongMap[q.id || q.q] = q;
+    els.feedback.textContent = `おしい！ 正解は「${q.choices[q.answer]}」  ${q.explanation}`;
+    els.feedback.className = 'feedback bad';
+    playBad();
+  }
+
+  [...els.choices.children].forEach((b, i) => {
+    if (i === q.answer) b.classList.add('good');
+  });
+
+  state.history.unshift({
+    shortQ: q.q.length > 28 ? q.q.slice(0, 28) + '...' : q.q,
+    ok,
+    answer: q.choices[q.answer]
+  });
+  state.history = state.history.slice(0, 5);
+
+  saveProgress();
+  updateSide();
+
+  setTimeout(() => {
+    if (state.currentIndex < state.currentList.length - 1) {
+      state.currentIndex += 1;
+    } else {
+      state.currentIndex = 0;
+    }
+    state.locked = false;
+    render();
+  }, ok ? 750 : 1200);
+}
+
+function showAnswer() {
+  if (state.locked || !state.currentList.length) return;
+  state.locked = true;
+  const q = state.currentList[state.currentIndex];
+  state.wrongMap[q.id || q.q] = q;
+  state.streak = 0;
+  state.hp = Math.max(0, state.hp - 8);
+  els.feedback.textContent = `正解は「${q.choices[q.answer]}」  ${q.explanation}`;
+  els.feedback.className = 'feedback bad';
+  [...els.choices.children].forEach((b, i) => {
+    if (i === q.answer) b.classList.add('good');
+  });
+  saveProgress();
+  updateSide();
+
+  setTimeout(() => {
+    if (state.currentIndex < state.currentList.length - 1) {
+      state.currentIndex += 1;
+    } else {
+      state.currentIndex = 0;
+    }
+    state.locked = false;
+    render();
+  }, 1100);
+}
+
+function nextQuestion() {
+  if (!state.currentList.length) return;
+  state.locked = false;
+  if (state.currentIndex < state.currentList.length - 1) state.currentIndex += 1;
+  render();
+}
+
+function prevQuestion() {
+  if (!state.currentList.length) return;
+  state.locked = false;
+  if (state.currentIndex > 0) state.currentIndex -= 1;
+  render();
+}
+
+function updateSide() {
+  const rate = state.total ? Math.round((state.correct / state.total) * 100) : 0;
+  els.statCorrect.textContent = state.correct;
+  els.statRate.textContent = rate + '%';
+  els.statStreak.textContent = state.streak;
+  els.statWrong.textContent = Object.keys(state.wrongMap).length;
+
+  const modeInfo = modeDefs.find(m => m.id === state.mode);
+  els.modeDesc.textContent = modeInfo.desc;
+  // FIX: always total questions count, never incorrect denominator like 45
+  els.progressNote.textContent = `${state.currentList.length ? state.currentIndex + 1 : 0} / ${state.currentList.length}`;
+  els.progressBar.style.width = state.currentList.length ? ((state.currentIndex + 1) / state.currentList.length * 100) + '%' : '0%';
+
+  els.historyList.innerHTML = '';
+  if (!state.history.length) {
+    els.historyList.innerHTML = '<div class="history-item"><span>まだ記録なし</span><span>—</span></div>';
+  } else {
+    state.history.forEach(h => {
+      const div = document.createElement('div');
+      div.className = 'history-item';
+      div.innerHTML = `<span>${h.shortQ}</span><span>${h.ok ? '⭕' : '❌'} ${h.answer}</span>`;
+      els.historyList.appendChild(div);
+    });
+  }
+
+  els.wrongList.innerHTML = '';
+  const wrongVals = Object.values(state.wrongMap).slice(0, 8);
+  if (!wrongVals.length) {
+    els.wrongList.innerHTML = '<div class="wrong-item"><span>まだなし</span><span>👍</span></div>';
+  } else {
+    wrongVals.forEach(w => {
+      const div = document.createElement('div');
+      div.className = 'wrong-item';
+      div.innerHTML = `<span>${w.q.length > 24 ? w.q.slice(0,24) + '...' : w.q}</span><span>${w.choices[w.answer]}</span>`;
+      els.wrongList.appendChild(div);
+    });
+  }
+
+  els.levelText.textContent = 'Lv.' + state.level;
+  els.hpBar.style.width = state.hp + '%';
+  els.hpText.textContent = state.hp + ' / 100';
+  els.xpBar.style.width = state.xp + '%';
+  els.xpText.textContent = state.xp + ' / 100';
+  els.comboText.textContent = state.streak;
+  els.missCountText.textContent = Object.keys(state.wrongMap).length;
+  els.avatar.textContent = state.level >= 6 ? '🐉' : state.level >= 4 ? '🦄' : state.level >= 2 ? '⚔️' : '🧙';
+}
+
+function toggleTranslation() {
+  state.showTranslation = !state.showTranslation;
+  render();
+}
+
+function speakText(text, lang='en-US') {
+  if (!('speechSynthesis' in window)) {
+    alert('このブラウザは読み上げに対応していません。');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const ut = new SpeechSynthesisUtterance(text);
+  ut.lang = lang;
+  ut.rate = 0.9;
+  ut.pitch = 1.0;
+  window.speechSynthesis.speak(ut);
+}
+
+function speakQuestion() {
+  if (!state.currentList.length) return;
+  const q = state.currentList[state.currentIndex];
+  speakText(q.speech || q.q, 'en-US');
+}
+
+function speakChoices() {
+  if (!state.currentList.length) return;
+  const q = state.currentList[state.currentIndex];
+  speakText(q.choices.join('. '), 'en-US');
+}
+
+function playGood() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.frequency.value = 620; osc.type = 'triangle';
+    gain.gain.setValueAtTime(0.05, ctx.currentTime);
+    osc.start(); osc.stop(ctx.currentTime + 0.12);
+  } catch(e) {}
+}
+
+function playBad() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.frequency.value = 220; osc.type = 'triangle';
+    gain.gain.setValueAtTime(0.05, ctx.currentTime);
+    osc.start(); osc.stop(ctx.currentTime + 0.14);
+  } catch(e) {}
+}
+
+loadProgress();
+buildModeButtons();
+setMainOrder(state.mainOrder);
+switchMode('main50');
+</script>
+</body>
+</html>
