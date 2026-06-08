@@ -12,7 +12,7 @@
 <body>
 <div class="wrap">
 <div class="card hero">
-<div><h1>英検単語暗記 500</h1><div class="sub">5級の基礎から、3級を見据えた語彙まで500語。<br>メインは <b>単語テスト</b>。例文は、所有代名詞・5W1H・英検型の質問文を混ぜています。質問→回答の例文は、同じ声のまま、質問だけ少しゆっくり・回答は普通速度で読み上げます。</div></div>
+<div><h1>英検単語暗記 500</h1><div class="sub">5級の基礎から、3級を見据えた語彙まで500語。<br>メインは <b>単語テスト</b>。例文は、所有代名詞・5W1H・英検型の質問文を混ぜています。質問→回答の例文は、同じ声・同じ速度で読み上げ、QとAの間に1秒あけます。正解後は読み上げ完了から1秒後に次へ進みます。</div></div>
 <div class="stats"><div class="stat">正解<b id="ok">0</b></div><div class="stat">正答率<b id="rate">0%</b></div><div class="stat">苦手<b id="wrong">0</b></div><div class="stat">進み<b id="prog">0/0</b></div></div>
 </div>
 <div class="card"><div class="modes" id="modes"></div></div>
@@ -192,16 +192,11 @@ function makeUtterance(text, role, onend=null){
   u.lang = "en-US";
   let vs = getEnglishVoices();
 
-  // iPhone向け：質問も回答も同じ自然な声。
-  // 質問だけ少しゆっくり、回答は普通速度。pitchはほぼ固定。
+  // iPhone向け：質問も回答も同じ声・同じ速度。
+  // QとAの間だけ1秒あける。
   u.pitch = 1.0;
-  if(role==="q"){
-    u.rate = .84;
-  }else{
-    u.rate = .94;
-  }
+  u.rate = .88;
 
-  // iPhone/Safariで変な声になりにくいよう、基本は同じ英語音声を使用。
   let natural = vs.find(v=>/(Samantha|Karen|Daniel|Moira|Tessa|Alex|Ava|Allison)/i.test(v.name||""));
   if(natural) u.voice = natural;
   else if(vs[0]) u.voice = vs[0];
@@ -223,7 +218,7 @@ function speakQA(text,onend=null){
   if(parts.length>=2){
     let q = parts[0];
     let a = parts.slice(1).join(" ");
-    let uq = makeUtterance(q,"q",()=>setTimeout(()=>speechSynthesis.speak(makeUtterance(a,"a",onend)),250));
+    let uq = makeUtterance(q,"q",()=>setTimeout(()=>speechSynthesis.speak(makeUtterance(a,"a",onend)),1000));
     speechSynthesis.speak(uq);
   }else{
     speechSynthesis.speak(makeUtterance(text,"q",onend));
@@ -324,7 +319,7 @@ function answer(enc, el){
     st.hist.unshift({no:wordIndex(w)+1,e:w.e,j:w.j,ok:true});st.hist=st.hist.slice(0,5);
     save();stat();
     // 正解後に例文を読み上げてから次へ
-    speakQA(w.ex, ()=>setTimeout(next,700));
+    speakQA(w.ex, ()=>setTimeout(next,1000));
   }else{
     if(!st.retrying){st.total++; st.retrying=true; st.hist.unshift({no:wordIndex(w)+1,e:w.e,j:w.j,ok:false}); st.hist=st.hist.slice(0,5);}
     st.wrong[w.id]=w;
