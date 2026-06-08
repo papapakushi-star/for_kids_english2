@@ -12,7 +12,7 @@
 <body>
 <div class="wrap">
 <div class="card hero">
-<div><h1>英検単語暗記 500</h1><div class="sub">5級の基礎から、3級を見据えた語彙まで500語。<br>メインは <b>単語テスト</b>。例文は、所有代名詞・5W1H・英検型の質問文を混ぜています。質問→回答の例文は、声・高さ・速さを変えて読み上げます。</div></div>
+<div><h1>英検単語暗記 500</h1><div class="sub">5級の基礎から、3級を見据えた語彙まで500語。<br>メインは <b>単語テスト</b>。例文は、所有代名詞・5W1H・英検型の質問文を混ぜています。質問→回答の例文は、同じ声のまま、質問だけ少しゆっくり・回答は普通速度で読み上げます。</div></div>
 <div class="stats"><div class="stat">正解<b id="ok">0</b></div><div class="stat">正答率<b id="rate">0%</b></div><div class="stat">苦手<b id="wrong">0</b></div><div class="stat">進み<b id="prog">0/0</b></div></div>
 </div>
 <div class="card"><div class="modes" id="modes"></div></div>
@@ -191,15 +191,21 @@ function makeUtterance(text, role, onend=null){
   let u = new SpeechSynthesisUtterance(text);
   u.lang = "en-US";
   let vs = getEnglishVoices();
-  // 質問はやや高め・ゆっくり、回答は少し低め・自然に。
+
+  // iPhone向け：質問も回答も同じ自然な声。
+  // 質問だけ少しゆっくり、回答は普通速度。pitchはほぼ固定。
+  u.pitch = 1.0;
   if(role==="q"){
-    u.rate = .82; u.pitch = 1.18;
-    if(vs[0]) u.voice = vs[0];
+    u.rate = .84;
   }else{
-    u.rate = .9; u.pitch = .92;
-    if(vs[1]) u.voice = vs[1];
-    else if(vs[0]) u.voice = vs[0];
+    u.rate = .94;
   }
+
+  // iPhone/Safariで変な声になりにくいよう、基本は同じ英語音声を使用。
+  let natural = vs.find(v=>/(Samantha|Karen|Daniel|Moira|Tessa|Alex|Ava|Allison)/i.test(v.name||""));
+  if(natural) u.voice = natural;
+  else if(vs[0]) u.voice = vs[0];
+
   if(onend) u.onend = onend;
   return u;
 }
@@ -222,6 +228,14 @@ function speakQA(text,onend=null){
   }else{
     speechSynthesis.speak(makeUtterance(text,"q",onend));
   }
+}
+
+
+function toggleVoiceMode(){
+  st.voiceMode = st.voiceMode==="safe" ? "split" : "safe";
+  const btn = document.getElementById("voiceModeBtn");
+  if(btn) btn.textContent = st.voiceMode==="safe" ? "安全音声" : "声分け";
+  speakQA("What does she drink? She drinks water.");
 }
 
 function splitQA(en, jp){
